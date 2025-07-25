@@ -289,12 +289,12 @@ const number = [
 
 const CONSTANTS = {
   AUDIO: {
-    NEW_GAME: "./src/assets/audio/ID_NEWGAME.mp3",
-    RIGHT: "./src/assets/audio/ID_RIGHT.mp3",
+    NEW_GAME: "./assets/audio/ID_NEWGAME.mp3",
+    RIGHT: "./assets/audio/ID_RIGHT.mp3",
   },
   IMAGES: {
-    BACKGROUND: "./src/assets/image/ID_IMAGE30.png",
-    EXCELLENT: "./src/assets/image/ID_IMAGE26.png",
+    BACKGROUND: "./assets/image/ID_IMAGE30.png",
+    EXCELLENT: "./assets/image/ID_IMAGE26.png",
   },
   MESSAGES: {
     WRONG: "Sai rồi Pháo ơi! Pháo tính toán lại nào!",
@@ -375,7 +375,7 @@ const MathApp = {
       case "Không":
         this.handleNumberInput(0);
         break;
-        
+
       case "Phạm vi 10":
       case "Phạm vi 20":
         this.range = Number(message.split(" ").pop());
@@ -483,7 +483,7 @@ const MathApp = {
       .slice(0, items.range + 1)
       .map((num) => {
         const randomIndex = Math.floor(Math.random() * 5) + 1;
-        const imagePath = `./src/assets/image/ID_IMAGE-${randomIndex}.png`;
+        const imagePath = `./assets/image/ID_IMAGE-${randomIndex}.png`;
         return `
           <div
             data-speak="${num}"
