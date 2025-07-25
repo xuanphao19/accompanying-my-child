@@ -1,0 +1,37 @@
+<svg viewBox="0 0 200 200"
+  xmlns="http://www.w3.org/2000/svg"
+  stroke-linecap="round" stroke-linejoin="round" fill="blue" >
+  <polygon points="100,10 190,78 154,184 46,184 10,78"
+    stroke="lightblue" stroke-width="10" />
+  <g stroke="white" stroke-width="16">
+    <path d="M 60 100 H140" />
+    <path d="M100 60 V140" />
+  </g>
+</svg>
+<svg viewBox="0 0 200 200"
+  xmlns="http://www.w3.org/2000/svg"
+  stroke-linecap="round" stroke-linejoin="round" fill="blue" >
+  <polygon points="100,10 190,78 154,184 46,184 10,78"
+    stroke="lightblue" stroke-width="10" />
+  <g stroke="white" stroke-width="16">
+    <path d="M60 130 H140" />
+    <path d="M 60 96 H140" />
+  </g>
+</svg>
+<svg viewBox="0 0 200 200"
+  xmlns="http://www.w3.org/2000/svg"
+  stroke-linecap="round" stroke-linejoin="round" fill="blue" >
+  <polygon points="100,10 190,78 154,184 46,184 10,78"
+    stroke="lightblue" stroke-width="10" />
+    <text
+          x="98"
+          y="110"
+          text-anchor="middle"
+          dominant-baseline="middle"
+          font-size="80"
+          font-weight="600"
+          fill="white"
+          font-family="Arial">
+          10
+    </text>
+</svg>
