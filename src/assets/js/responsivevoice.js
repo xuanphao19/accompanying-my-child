@@ -1666,7 +1666,7 @@ if (typeof responsiveVoice === "undefined") {
         a.enableEstimationTimeout = !0;
         a.analytics = { characterCount: 0 };
         a.log = function (b) {
-          // a.debug && console.log(b);
+          a.debug && console.log(b);
         };
         a.init = function () {
           a.is_wordpress = x();

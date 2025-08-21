@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ứng dụng Toán học cho học sinh cấp 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+      <h1 class="text-2xl font-bold text-center mb-4">Toán học vui</h1>
+      <div id="main-menu">
+        <div class="flex justify-center gap-4 mb-4">
+          <button id="range10" class="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600">Phạm vi 10</button>
+          <button id="range20" class="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600">Phạm vi 20</button>
+        </div>
+        <div class="flex justify-center gap-4 mb-4">
+          <button id="addition-table" class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600">Bảng cộng</button>
+          <button id="subtraction-table" class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600">
+            Bảng trừ
+          </button>
+        </div>
+        <div id="game-area" class="hidden">
+          <div id="question" class="text-xl text-center mb-4"></div>
+          <div id="choices" class="grid grid-cols-2 gap-4 mb-4"></div>
+          <div id="result" class="text-center mt-4 min-h-[24px]"></div>
+          <p id="score" class="text-center mt-2">Điểm: 0</p>
+          <button id="back-to-menu" class="mt-4 w-full bg-gray-500 text-white p-2 rounded-lg hover:bg-gray-600">
+            Quay lại
+          </button>
+        </div>
+        <div id="table-area" class="hidden">
+          <div class="flex flex-wrap justify-center gap-2 mb-4">
+            <button class="tab-button bg-blue-300 text-white p-2 rounded-lg hover:bg-blue-400" data-value="1">1</button>
+            <button class="tab-button bg-blue-300 text-white p-2 rounded-lg hover:bg-blue-400" data-value="2">2</button>
+            <button class="tab-button bg-blue-300 text-white p-2 rounded-lg hover:bg-blue-400" data-value="3">3</button>
+            <button class="tab-button bg-blue-300 text-white p-2 rounded-lg hover:bg-blue-400" data-value="4">4</button>
+            <button class="tab-button bg-blue-300 text-white p-2 rounded-lg hover:bg-blue-400" data-value="5">5</button>
+            <button class="tab-button bg-blue-300 text-white p-2 rounded-lg hover:bg-blue-400" data-value="6">6</button>
+            <button class="tab-button bg-blue-300 text-white p-2 rounded-lg hover:bg-blue-400" data-value="7">7</button>
+            <button class="tab-button bg-blue-300 text-white p-2 rounded-lg hover:bg-blue-400" data-value="8">8</button>
+            <button class="tab-button bg-blue-300 text-white p-2 rounded-lg hover:bg-blue-400" data-value="9">9</button>
+          </div>
+          <div id="table-content" class="text-center"></div>
+          <button id="back-to-menu-table" class="mt-4 w-full bg-gray-500 text-white p-2 rounded-lg hover:bg-gray-600">
+            Quay lại
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let score = 0;
+      let correctAnswer;
+      let currentRange = 10; // Mặc định phạm vi 10
+      let currentMode = "menu"; // 'menu', 'game' hoặc 'table'
+      let currentTableType = ""; // 'addition' hoặc 'subtraction'
+
+      function generateQuestion() {
+        let num1 = Math.floor(Math.random() * currentRange) + 1;
+        let num2 = Math.floor(Math.random() * currentRange) + 1;
+        const operators = ["+", "-"];
+        const operator = operators[Math.floor(Math.random() * operators.length)];
+
+        if (operator === "-" && num1 < num2) {
+          [num1, num2] = [num2, num1];
+        }
+
+        correctAnswer = operator === "+" ? num1 + num2 : num1 - num2;
+        document.getElementById("question").textContent = `${num1} ${operator} ${num2} = ?`;
+        document.getElementById("result").textContent = "";
+        generateChoices(correctAnswer);
+      }
+
+      function generateChoices(correctAnswer) {
+        const choicesContainer = document.getElementById("choices");
+        choicesContainer.innerHTML = "";
+        const choices = [correctAnswer];
+
+        // Tạo 3 đáp án sai
+        while (choices.length < 4) {
+          const wrongAnswer = Math.floor(Math.random() * (currentRange * 2)) + 1;
+          if (wrongAnswer !== correctAnswer && !choices.includes(wrongAnswer)) {
+            choices.push(wrongAnswer);
+          }
+        }
+
+        // Xáo trộn các đáp án
+        for (let i = choices.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [choices[i], choices[j]] = [choices[j], choices[i]];
+        }
+
+        // Tạo các nút đáp án
+        choices.forEach((choice) => {
+          const button = document.createElement("button");
+          button.textContent = choice;
+          button.className = "bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600";
+          button.addEventListener("click", () => checkAnswer(choice));
+          choicesContainer.appendChild(button);
+        });
+      }
+
+      function checkAnswer(selectedAnswer) {
+        if (selectedAnswer === correctAnswer) {
+          score += 10;
+          document.getElementById("result").textContent = "Đúng rồi! 🎉";
+          document.getElementById("result").classList.remove("text-red-500");
+          document.getElementById("result").classList.add("text-green-500");
+        } else {
+          document.getElementById("result").textContent = `Sai rồi! Đáp án đúng là ${correctAnswer}.`;
+          document.getElementById("result").classList.remove("text-green-500");
+          document.getElementById("result").classList.add("text-red-500");
+        }
+
+        document.getElementById("score").textContent = `Điểm: ${score}`;
+        setTimeout(generateQuestion, 1500);
+      }
+
+      function showTable(number, type) {
+        const tableContent = document.getElementById("table-content");
+        tableContent.innerHTML = "";
+        let content = `<h2 class="text-lg font-bold mb-2">Bảng ${type === "addition" ? "cộng" : "trừ"} ${number}</h2>`;
+        for (let i = 1; i <= 10; i++) {
+          const result = type === "addition" ? number + i : number + i - i;
+          content += `<p>${number} ${type === "addition" ? "+" : "-"} ${i} = ${result}</p>`;
+        }
+        tableContent.innerHTML = content;
+      }
+
+      document.getElementById("range10").addEventListener("click", () => {
+        currentRange = 10;
+        currentMode = "game";
+        document
+          .getElementById("main-menu")
+          .querySelectorAll("button")
+          .forEach((btn) => btn.classList.remove("bg-green-600", "bg-blue-600"));
+        document.getElementById("range10").classList.add("bg-green-600");
+        document.getElementById("game-area").classList.remove("hidden");
+        document.getElementById("table-area").classList.add("hidden");
+        score = 0;
+        document.getElementById("score").textContent = "Điểm: 0";
+        generateQuestion();
+      });
+
+      document.getElementById("range20").addEventListener("click", () => {
+        currentRange = 20;
+        currentMode = "game";
+        document
+          .getElementById("main-menu")
+          .querySelectorAll("button")
+          .forEach((btn) => btn.classList.remove("bg-green-600", "bg-blue-600"));
+        document.getElementById("range20").classList.add("bg-green-600");
+        document.getElementById("game-area").classList.remove("hidden");
+        document.getElementById("table-area").classList.add("hidden");
+        score = 0;
+        document.getElementById("score").textContent = "Điểm: 0";
+        generateQuestion();
+      });
+
+      document.getElementById("addition-table").addEventListener("click", () => {
+        currentMode = "table";
+        currentTableType = "addition";
+        document
+          .getElementById("main-menu")
+          .querySelectorAll("button")
+          .forEach((btn) => btn.classList.remove("bg-green-600", "bg-blue-600"));
+        document.getElementById("addition-table").classList.add("bg-blue-600");
+        document.getElementById("game-area").classList.add("hidden");
+        document.getElementById("table-area").classList.remove("hidden");
+        showTable(1, "addition");
+        document.querySelectorAll(".tab-button").forEach((btn) => btn.classList.remove("bg-blue-500"));
+        document.querySelector('.tab-button[data-value="1"]').classList.add("bg-blue-500");
+      });
+
+      document.getElementById("subtraction-table").addEventListener("click", () => {
+        currentMode = "table";
+        currentTableType = "subtraction";
+        document
+          .getElementById("main-menu")
+          .querySelectorAll("button")
+          .forEach((btn) => btn.classList.remove("bg-green-600", "bg-blue-600"));
+        document.getElementById("subtraction-table").classList.add("bg-blue-600");
+        document.getElementById("game-area").classList.add("hidden");
+        document.getElementById("table-area").classList.remove("hidden");
+        showTable(1, "subtraction");
+        document.querySelectorAll(".tab-button").forEach((btn) => btn.classList.remove("bg-blue-500"));
+        document.querySelector('.tab-button[data-value="1"]').classList.add("bg-blue-500");
+      });
+
+      document.querySelectorAll(".tab-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          const value = parseInt(button.getAttribute("data-value"));
+          showTable(value, currentTableType);
+          document.querySelectorAll(".tab-button").forEach((btn) => btn.classList.remove("bg-blue-500"));
+          button.classList.add("bg-blue-500");
+        });
+      });
+
+      document.getElementById("back-to-menu").addEventListener("click", () => {
+        currentMode = "menu";
+        document
+          .getElementById("main-menu")
+          .querySelectorAll("button")
+          .forEach((btn) => btn.classList.remove("bg-green-600", "bg-blue-600"));
+        document.getElementById("game-area").classList.add("hidden");
+        document.getElementById("table-area").classList.add("hidden");
+      });
+
+      document.getElementById("back-to-menu-table").addEventListener("click", () => {
+        currentMode = "menu";
+        document
+          .getElementById("main-menu")
+          .querySelectorAll("button")
+          .forEach((btn) => btn.classList.remove("bg-green-600", "bg-blue-600"));
+        document.getElementById("game-area").classList.add("hidden");
+        document.getElementById("table-area").classList.add("hidden");
+      });
+    </script>
+  </body>
+</html>
+
+<!--
+
+
+https://github.com/PhamQuangAnhh/htmlcss_project-6
+
+https://xuanphao19.github.io/accompanying-my-child/
+https://PhamQuangAnhh.github.io/htmlcss_project-6/
+-->
